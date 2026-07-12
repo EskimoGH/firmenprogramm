@@ -1,0 +1,212 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum ProjectStatus {
+  OFFEN
+  IN_BEARBEITUNG
+  ABGESCHLOSSEN
+  STORNIERT
+}
+
+model Company {
+  id          String @id @default(cuid())
+  name        String
+  debtorNo    String?
+  street      String?
+  postalCode  String?
+  city        String?
+  phone       String?
+  email       String?
+
+  contacts    CompanyContact[]
+  projects    Project[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+}
+
+model CompanyContact {
+  id          String @id @default(cuid())
+  companyId   String
+  company     Company @relation(fields:[companyId], references:[id])
+
+  firstName   String
+  lastName    String
+  role        String?
+  phone       String?
+  email       String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+}
+
+model Project {
+  id              String @id @default(cuid())
+  verkaufsId      String @unique
+  projektname     String?
+  auftragsnummer  String?
+  status          ProjectStatus @default(OFFEN)
+
+  companyId       String
+  company         Company @relation(fields:[companyId], references:[id])
+
+  street          String?
+  postalCode      String?
+  city            String?
+  note            String?
+
+  calculations    Calculation[]
+  documents       ProjectDocument[]
+  activities      Activity[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  deletedAt       DateTime?
+}
+
+model Calculation {
+  id              String @id @default(cuid())
+  projectId       String
+  project         Project @relation(fields:[projectId], references:[id])
+
+  version         Int
+  title           String?
+  active          Boolean @default(false)
+
+  summary         CalculationSummary?
+  positions       AuctionPosition[]
+  transports      ProjectTransport[]
+  containers      ProjectContainer[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([projectId, version])
+}
+
+model CalculationSummary {
+  id              String @id @default(cuid())
+  calculationId   String @unique
+  calculation      Calculation @relation(fields:[calculationId], references:[id])
+
+  materialTotal   Float @default(0)
+  transportTotal  Float @default(0)
+  containerTotal  Float @default(0)
+  labourTotal     Float @default(0)
+  disposalTotal   Float @default(0)
+  otherTotal      Float @default(0)
+  profit          Float @default(0)
+  offerPrice      Float @default(0)
+}
+
+model AuctionPosition {
+  id              String @id @default(cuid())
+  calculationId   String
+  calculation     Calculation @relation(fields:[calculationId], references:[id])
+
+  positionNo      Int
+  avv             String
+  description     String
+  customText      String?
+
+  quantity        Float
+  metalShare      Float?
+  exchangePrice   Float?
+  discount        Float?
+  rawValue        Float?
+  dismantlingCost Float?
+  materialValue   Float?
+
+  createdAt       DateTime @default(now())
+}
+
+model ProjectTransport {
+  id              String @id @default(cuid())
+  calculationId   String
+  calculation     Calculation @relation(fields:[calculationId], references:[id])
+
+  vehicleType     String
+  distanceKm      Float?
+  trips           Int?
+  avgSpeed        Float?
+  fuelConsumption Float?
+  dieselPrice     Float?
+  toll            Float?
+  totalCost       Float?
+}
+
+model ProjectContainer {
+  id              String @id @default(cuid())
+  calculationId   String
+  calculation     Calculation @relation(fields:[calculationId], references:[id])
+
+  containerType   String
+  quantity        Int
+  standingDays    Int?
+  price           Float?
+  total           Float?
+}
+
+model ProjectDocument {
+  id              String @id @default(cuid())
+  projectId       String
+  project         Project @relation(fields:[projectId], references:[id])
+
+  category        String?
+  version         Int @default(1)
+  fileName        String
+  filePath        String
+  mimeType        String?
+
+  createdAt       DateTime @default(now())
+}
+
+model Activity {
+  id              String @id @default(cuid())
+  projectId       String
+  project         Project @relation(fields:[projectId], references:[id])
+
+  type            String
+  message         String
+
+  createdAt       DateTime @default(now())
+}
+
+model AvvMaster {
+  id              String @id @default(cuid())
+  avv             String @unique
+  description     String
+}
+
+model VehicleMaster {
+  id              String @id @default(cuid())
+  type            String @unique
+  avgSpeed        Float
+  fuelConsumption Float
+  toll            Float
+  dieselPrice     Float
+}
+
+model ContainerMaster {
+  id              String @id @default(cuid())
+  name            String @unique
+  price           Float?
+}
+
+model DocumentTemplate {
+  id              String @id @default(cuid())
+  name            String
+  filePath        String
+}
+
+model AppSettings {
+  id              String @id @default(cuid())
+  companyName     String?
+}
