@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { prisma } from "@/lib/prisma"
 
 import {
   Breadcrumb,
@@ -10,18 +11,6 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
 
-const projects = [
-  {
-    id: "1",
-    verkaufsId: "V-2026-001",
-    ag: "Müller GmbH",
-  },
-  {
-    id: "2",
-    verkaufsId: "V-2026-002",
-    ag: "Schmidt AG",
-  },
-]
 
 export default async function ProjektDetails({
   params,
@@ -29,11 +18,26 @@ export default async function ProjektDetails({
   params: Promise<{ id: string }>
 }) {
 
-const { id } = await params
+  const { id } = await params
 
-const project = projects.find(
-  (p) => p.id === id
-)
+
+  const project = await prisma.project.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      company: true,
+    },
+  })
+
+
+  if (!project) {
+    return (
+      <div className="p-8">
+        Projekt nicht gefunden
+      </div>
+    )
+  }
 
 return (
 
@@ -76,7 +80,7 @@ Projekte
 <BreadcrumbItem>
 
 <BreadcrumbPage>
-{project?.verkaufsId}
+{project.verkaufsId}
 </BreadcrumbPage>
 
 </BreadcrumbItem>
@@ -92,11 +96,11 @@ Projekte
 <div>
 
 <h1 className="text-3xl font-semibold">
-Projekt {project?.verkaufsId}
+Projekt {project.verkaufsId}
 </h1>
 
 <p className="text-muted-foreground mt-1">
-{project?.ag}
+{project.company.name}
 </p>
 
 </div>
@@ -134,7 +138,7 @@ Verkaufs-ID
 </span>
 
 <p>
-V-2026-001
+{project.verkaufsId}
 </p>
 
 </div>
@@ -147,7 +151,7 @@ Auftragsnummer
 </span>
 
 <p>
-A-12345
+{project.auftragsnummer}
 </p>
 
 </div>
@@ -159,7 +163,7 @@ Auftraggeber
 </span>
 
 <p>
-Müller GmbH
+{project.company.name}
 </p>
 
 </div>
@@ -198,11 +202,11 @@ Müller Holding
 
 
 <p>
-Hauptstraße 1
+{project.street}
 </p>
 
 <p>
-01067 Dresden
+{project.postalCode} {project.city}
 </p>
 
 

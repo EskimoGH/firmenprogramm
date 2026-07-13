@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { createProject } from "@/actions/project.actions"
 import { getProjects } from "@/services/project.service"
+import { CreateProjectDialog } from "@/components/layout/create-project-dialog"
 
 export default async function Projekte() {
 
@@ -10,13 +11,15 @@ export default async function Projekte() {
   return (
     <div className="p-8">
 
-      <form action={createProject}>
-        <Button>Neues Projekt</Button>
-      </form>
+      <div className="flex justify-between items-center mb-6">
 
-      <h1 className="text-3xl font-semibold mb-6">
-        Projekte
-      </h1>
+        <h1 className="text-3xl font-semibold">
+          Projekte
+        </h1>
+
+        <CreateProjectDialog />
+
+      </div>  
 
       <div className="rounded-md border">
 
