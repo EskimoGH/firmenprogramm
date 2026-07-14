@@ -18,3 +18,27 @@ export async function getProjects() {
     },
   })
 }
+
+export async function getProject(id: string) {
+  return prisma.project.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      company: {
+        include: {
+          contacts: true
+        },
+      },
+      calculations: {
+        include: {
+          positions: true,
+          transports: true,
+          containers: true,
+          summary: true,
+        },
+      },
+      documents: true,
+    },
+  })
+}

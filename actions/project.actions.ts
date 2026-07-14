@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
+import { revalidatePath } from "next/cache"
 
 export async function createProject(formData: FormData) {
   const companyName = formData.get("company") as string
@@ -31,4 +32,65 @@ export async function createProject(formData: FormData) {
   })
 
   redirect(`/projekte/${project.id}`)
+}
+
+export async function updateProjectNote(
+  projectId: string,
+  note: string
+) {
+
+  await prisma.project.update({
+    where: {
+      id: projectId,
+    },
+    data: {
+      note,
+    },
+  })
+
+  revalidatePath(`/projekte/${projectId}`)
+}
+
+export async function updateProjectLocation(
+  projectId: string,
+  data: {
+    street: string
+    postalCode: string
+    city: string
+  }
+) {
+
+  await prisma.project.update({
+    where: {
+      id: projectId,
+    },
+    data,
+  })
+
+  revalidatePath(`/projekte/${projectId}`)
+}
+
+export async function updateProjectInformation(
+  projectId: string,
+  data: {
+    projektname: string
+    auftragsnummer: string
+  }
+) {
+
+  await prisma.project.update({
+
+    where: {
+      id: projectId,
+    },
+
+    data: {
+      projektname: data.projektname || null,
+      auftragsnummer: data.auftragsnummer || null,
+    },
+
+  })
+
+
+  revalidatePath(`/projekte/${projectId}`)
 }
