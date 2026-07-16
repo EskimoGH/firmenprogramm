@@ -183,6 +183,9 @@ model AvvMaster {
   id              String @id @default(cuid())
   avv             String @unique
   description     String
+  price           Float @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model VehicleMaster {

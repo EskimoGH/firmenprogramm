@@ -15,6 +15,7 @@ import { CompanyCard } from "@/components/layout/company-card"
 import { LocationCard } from "@/components/layout/location-card"
 import { ContactsCard } from "@/components/layout/contacts-card"
 import { NotesCard } from "@/components/layout/notes-card"
+import AngebotsCard from "@/components/layout/angebots-card"
 
 export default async function ProjektDetails({
   params,
@@ -88,7 +89,7 @@ export default async function ProjektDetails({
 
       </div>
 
-      <div className="grid gap-6 md:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-3">
 
         <ProjectInformationCard projectId={project.id} project={project}/>
 
@@ -96,13 +97,19 @@ export default async function ProjektDetails({
 
         <LocationCard projectId={project.id} project={project} />
 
+      </div>
+      
+      <div className="grid gap-6 md:grid-cols-3">
+        
+        <NotesCard projectId={project.id} note={project.note}/>
+
         <ContactsCard contacts={project.company.contacts} />
 
       </div>
-      
-      <div className="grid gap-6 md:grid-cols-4">
+
+      <div className="grid gap-6 md:grid-cols-1">
         
-        <NotesCard projectId={project.id} note={project.note}/>
+        <AngebotsCard projectId={project.id} calculations={project.calculations} />
 
       </div>
 
