@@ -7,6 +7,13 @@ import {
 
 import { AppSidebar } from "@/components/layout/app-sidebar"
 
+import { Geist } from "next/font/google"
+
+
+const geist = Geist({
+  subsets: ["latin"],
+})
+
 
 export const metadata = {
   title: "Firmenprogramm",
@@ -24,7 +31,7 @@ return (
 
 <html lang="de">
 
-<body>
+<body className={geist.className}>
 
 <SidebarProvider>
 

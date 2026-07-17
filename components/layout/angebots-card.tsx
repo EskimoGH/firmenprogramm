@@ -84,19 +84,18 @@ export default function AngebotsCard({
 
               </div>
 
-
-              <a
-                href={`/calculations/${calc.id}`}
+                <a
+                href={`/projekte/${projectId}/kalkulation/${calc.id}`}
                 className="
-                rounded-md
-                border
-                px-3
-                py-1
-                text-sm
+                    rounded-md
+                    border
+                    px-3
+                    py-1
+                    text-sm
                 "
-              >
+                >
                 Öffnen
-              </a>
+                </a>
 
             </div>
 
