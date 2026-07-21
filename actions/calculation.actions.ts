@@ -29,10 +29,29 @@ export async function createCalculation(
   const calculation = await prisma.calculation.create({
 
     data: {
+
       projectId,
+
       version,
+
       title: `Berechnung Version ${version}`,
+
       active: false,
+
+
+      summary: {
+        create: {
+          materialTotal: 0,
+          transportTotal: 0,
+          containerTotal: 0,
+          labourTotal: 0,
+          disposalTotal: 0,
+          otherTotal: 0,
+          profit: 0,
+          offerPrice: 0,
+        },
+      },
+
     },
 
   })

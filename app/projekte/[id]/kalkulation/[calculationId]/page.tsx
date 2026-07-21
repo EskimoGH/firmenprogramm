@@ -20,10 +20,11 @@ export default async function CalculationPage({
   params: Promise<{
     id: string
     calculationId: string
+    
   }>
 }) {
 
-  const { calculationId } = await params
+  const { id: projectId, calculationId } = await params
 
   const calculation = await prisma.calculation.findUnique({
 
@@ -103,7 +104,7 @@ export default async function CalculationPage({
 
       <CalculationHeader calculation={calculation} />
 
-      <MaterialSection calculation={calculation} avvMaster={avvMaster}/>
+      <MaterialSection calculation={calculation} avvMaster={avvMaster} projectId={projectId}/>
 
       {/* <TransportCard calculation={calculation} /> */}
 

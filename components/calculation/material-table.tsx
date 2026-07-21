@@ -7,11 +7,18 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { MaterialRowActions } from "@/components/calculation/material-row-actions"
+import { formatCurrency} from "@/lib/format/currency"
+import { formatNumber } from "@/lib/format/number-to"
+
+
 
 export function MaterialTable({
   positions,
+  projectId,
 }: {
   positions: any[]
+  projectId: string
 }) {
 
   return (
@@ -40,9 +47,9 @@ export function MaterialTable({
 
             <TableHead>Demontagekosten</TableHead>
 
-            <TableHead>
-              Materialwert nach Abzug
-            </TableHead>
+            <TableHead>Materialwert nach Abzug</TableHead>
+            
+            <TableHead className="text-right">Aktionen</TableHead>
 
           </TableRow>
 
@@ -69,7 +76,7 @@ export function MaterialTable({
 
 
               <TableCell>
-                {position.quantity}
+                {formatNumber(position.quantity)} to
               </TableCell>
 
 
@@ -79,28 +86,38 @@ export function MaterialTable({
 
 
               <TableCell>
-                {position.exchangePrice?.toFixed(2) ?? "-"} €
+                {formatNumber(position.exchangePrice)} €/to
               </TableCell>
 
 
               <TableCell>
-                {position.discount ?? 0} %
+                {formatNumber(position.discount)} €/to
               </TableCell>
 
 
               <TableCell>
-                {position.rawValue?.toFixed(2) ?? "-"} €
+                {formatNumber(position.rawValue)} €/to
               </TableCell>
 
 
               <TableCell>
-                {position.dismantlingCost?.toFixed(2) ?? "-"} €
+                {formatNumber(position.dismantlingCost)} €/to
               </TableCell>
 
 
               <TableCell className="font-semibold">
 
-                {position.materialValue?.toFixed(2) ?? "-"} €
+                {formatNumber(position.materialValue)} €/to
+
+              </TableCell>
+
+              <TableCell className="text-right">
+
+                <MaterialRowActions
+                    position={position}
+                    projectId={projectId}
+                    calculationId={position.calculationId}
+                />
 
               </TableCell>
 
