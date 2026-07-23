@@ -26,8 +26,10 @@ import { deleteTransportPosition } from "@/actions/transport-position.action"
 
 export function TransportRowActions({
 transport,
+vehicleMaster,
 }:{
 transport:any
+vehicleMaster:any[]
 }){
 
 
@@ -97,6 +99,8 @@ Löschen
 
 <EditTransportDialog
 transport={transport}
+vehicleMaster={vehicleMaster}
+projectId={transport.projectId}
 open={open}
 onOpenChange={setOpen}
 />

@@ -8,6 +8,9 @@ export function calculateTransportCost({
   hourlyRate,
   toll,
 
+  overnightStops = 0,
+  overnightCost = 0,
+
 }: {
 
   distanceKm:number
@@ -18,42 +21,67 @@ export function calculateTransportCost({
   hourlyRate:number
   toll:number
 
+  overnightStops?:number
+  overnightCost?:number
+
 }) {
 
 
+  // Strecke inklusive Hin- und Rückfahrt
   const totalDistance =
     distanceKm * trips * 2
 
 
+
+  // Fahrzeit
   const drivingHours =
-    totalDistance / avgSpeed
+    avgSpeed > 0
+      ? totalDistance / avgSpeed
+      : 0
 
 
+
+  // Personalkosten
   const labourCost =
     drivingHours * hourlyRate
 
 
+
+  // Dieselverbrauch
   const fuelLiters =
     totalDistance *
     fuelConsumption /
     100
 
 
+
+  // Dieselkosten
   const fuelCost =
     fuelLiters *
     dieselPrice
 
 
+
+  // Maut
   const tollCost =
     totalDistance *
     toll
 
 
 
+  // Übernachtungen
+  const overnightTotal =
+    overnightStops *
+    overnightCost
+
+
+
+  // Gesamtkosten
   const totalCost =
     labourCost +
     fuelCost +
-    tollCost
+    tollCost +
+    overnightTotal
 
 
 
@@ -70,6 +98,8 @@ export function calculateTransportCost({
     fuelCost,
 
     tollCost,
+
+    overnightTotal,
 
     totalCost,
 

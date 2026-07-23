@@ -59,8 +59,20 @@ export function MaterialTable({
 
         <TableBody>
 
+          {positions.length === 0 ? (
 
-          {positions.map((position) => (
+            <TableRow>
+              <TableCell
+                colSpan={10}
+                className="text-center text-muted-foreground"
+              >
+                Keine Positionen vorhanden
+              </TableCell>
+            </TableRow>
+
+          ) : (
+
+            positions.map((position) => (
 
             <TableRow key={position.id}>
 
@@ -124,10 +136,10 @@ export function MaterialTable({
 
             </TableRow>
 
-          ))}
+              ))
+            )}
 
-
-        </TableBody>
+          </TableBody>
 
       </Table>
 

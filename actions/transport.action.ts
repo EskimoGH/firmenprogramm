@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache"
 import { updateTransportTotal } from "./calculation-summary.action"
 
 
-export async function createTransport(data: {
+export async function createTransportPosition(data: {
   projectId: string
   calculationId: string
 
@@ -20,40 +20,74 @@ export async function createTransport(data: {
   toll: number
 
   hourlyRate: number
+
+  overnightStops: number
+  overnightCost: number
+
+
+  drivingHours: number
+  labourCost: number
+  dieselCost: number
+  tollCost: number
+  overnightTotal: number
+
   totalCost:number
 }) {
 
 
-  await prisma.projectTransport.create({
+await prisma.projectTransport.create({
 
-    data: {
+  data: {
 
-      calculationId: data.calculationId,
+    calculationId: data.calculationId,
 
-      vehicleType: data.vehicleType,
 
-      distanceKm: data.distanceKm,
+    vehicleType: data.vehicleType,
 
-      trips: data.trips,
 
-      avgSpeed: data.avgSpeed,
+    distanceKm: data.distanceKm,
 
-      fuelConsumption: data.fuelConsumption,
+    trips: data.trips,
 
-      dieselPrice: data.dieselPrice,
 
-      toll: data.toll,
+    avgSpeed: data.avgSpeed,
 
-      hourlyRate: data.hourlyRate,
-      
-      totalCost:data.totalCost,
+    fuelConsumption: data.fuelConsumption,
 
-    },
+    dieselPrice: data.dieselPrice,
 
-  })
+    toll: data.toll,
+
+
+    hourlyRate: data.hourlyRate,
+
+
+    overnightStops: data.overnightStops,
+
+    overnightCost: data.overnightCost,
+
+
+    drivingHours: data.drivingHours,
+
+    labourCost: data.labourCost,
+
+    dieselCost: data.dieselCost,
+
+    tollCost: data.tollCost,
+
+    overnightTotal: data.overnightTotal,
+
+
+    totalCost: data.totalCost,
+
+  },
+
+})
 
   await updateTransportTotal(data.calculationId)
 
-  revalidatePath("/projekte")
+  revalidatePath(
+  `/projekte/${data.projectId}/kalkulation/${data.calculationId}`
+)
 
 }

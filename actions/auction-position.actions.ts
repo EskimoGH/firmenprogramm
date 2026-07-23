@@ -2,7 +2,8 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
-import { updateMaterialTotal } from "./calculation-summary.action"
+import { updateMaterialTotal, updateOfferPrice } from "./calculation-summary.action"
+
 
 export async function updateAuctionPosition(
   id: string,
@@ -58,8 +59,10 @@ export async function updateAuctionPosition(
 
   // Materialsumme aktualisieren
   await updateMaterialTotal(calculationId)
+  await updateOfferPrice(calculationId)
 
   revalidatePath(`/projekte/${projectId}/kalkulation/${calculationId}`)
+  revalidatePath(`/projekte/${projectId}`)
 }
 
 
@@ -77,9 +80,8 @@ export async function deleteAuctionPosition(
 
 
   await updateMaterialTotal(calculationId)
+  await updateOfferPrice(calculationId)
 
-
-  revalidatePath(
-    `/projekte/${projectId}/kalkulation/${calculationId}`
-  )
+  revalidatePath(`/projekte/${projectId}/kalkulation/${calculationId}`)
+  revalidatePath(`/projekte/${projectId}`)
 }

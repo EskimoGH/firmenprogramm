@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma"
 
 
+
 export async function updateMaterialTotal(
   calculationId: string
 ) {
@@ -91,6 +92,105 @@ export async function updateTransportTotal(
     },
 
   })
-
+  await updateOfferPrice(calculationId)
   return transportTotal
+}
+
+export async function updateOtherTotal(
+  calculationId:string
+){
+
+const costs =
+await prisma.additionalCost.findMany({
+
+where:{
+ calculationId
+},
+
+select:{ 
+ total:true
+}
+
+})
+
+
+const otherTotal =
+costs.reduce(
+(sum,cost)=>
+sum + cost.total,
+0
+)
+
+
+await prisma.calculationSummary.upsert({
+
+where:{
+ calculationId
+},
+
+update:{
+ otherTotal
+},
+
+create:{
+ calculationId,
+ otherTotal
+}
+
+})
+await updateOfferPrice(calculationId)
+
+return otherTotal
+
+}
+
+export async function updateOfferPrice(
+  calculationId:string
+){
+
+  const summary =
+    await prisma.calculationSummary.findUnique({
+
+      where:{
+        calculationId,
+      },
+
+    })
+
+
+  if(!summary){
+    return
+  }
+
+
+  const offerPrice =
+
+    (summary.materialTotal ?? 0)
+
+    -
+
+    (summary.transportTotal ?? 0)
+
+    -
+
+    (summary.containerTotal ?? 0)
+
+    -
+
+    (summary.otherTotal ?? 0)
+
+
+
+  await prisma.calculationSummary.update({
+
+    where:{
+      calculationId,
+    },
+
+    data:{
+      offerPrice,
+    },
+
+  })
+
 }

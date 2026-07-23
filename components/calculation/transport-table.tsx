@@ -14,10 +14,12 @@ import { formatCurrency } from "@/lib/format/currency"
 
 
 export function TransportTable({
-  transports,
-}: {
-  transports:any[]
-}) {
+ transports,
+ vehicleMaster,
+}:{
+ transports:any[]
+ vehicleMaster:any[]
+}){
 
 
 return (
@@ -103,7 +105,8 @@ Aktionen
 <TableCell className="text-right">
 
 <TransportRowActions
-transport={transport}
+  transport={transport}
+  vehicleMaster={vehicleMaster}
 />
 
 </TableCell>
@@ -113,6 +116,24 @@ transport={transport}
 
 
 ))}
+
+
+{transports.length === 0 && (
+
+  <TableRow>
+
+    <TableCell
+      colSpan={6}
+      className="text-center text-muted-foreground"
+    >
+
+      Keine Transportkosten vorhanden
+
+    </TableCell>
+
+  </TableRow>
+
+)}
 
 
 </TableBody>

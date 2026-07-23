@@ -60,6 +60,7 @@ export function TransportSection({
 
         <TransportTable
           transports={calculation.transports}
+          vehicleMaster={vehicleMaster}
         />
 
 

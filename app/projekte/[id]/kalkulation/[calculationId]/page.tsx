@@ -11,7 +11,7 @@ import {
 import { CalculationHeader } from "@/components/calculation/calculation-header"
 import { MaterialSection } from "@/components/calculation/material-section"
 import { TransportSection } from "@/components/calculation/transport-section"
-//import { AdditionalCostCard } from "@/components/calculation/additional-cost-card"
+import { AdditionalCostSection } from "@/components/calculation/additionalCost-section"
 //import { SummaryCard } from "@/components/calculation/summary-card"
 
 export default async function CalculationPage({
@@ -43,6 +43,7 @@ export default async function CalculationPage({
       positions: true,
       transports: true,
       containers: true,
+      additionalCosts:true,
       summary: true,
 
     },
@@ -66,6 +67,8 @@ export default async function CalculationPage({
     return <div>Kalkulation nicht gefunden.</div>
 
   }
+  const offerPrice =
+  calculation.summary?.offerPrice ?? 0
 
   return (
 
@@ -108,13 +111,13 @@ export default async function CalculationPage({
 
       </Breadcrumb>
 
-      <CalculationHeader calculation={calculation} />
+      <CalculationHeader calculation={calculation} offerPrice={offerPrice}/>
 
       <MaterialSection calculation={calculation} avvMaster={avvMaster} projectId={projectId}/>
 
       <TransportSection calculation={calculation} vehicleMaster={vehicleMaster} />
 
-      {/* <AdditionalCostCard calculation={calculation} /> */}
+      <AdditionalCostSection calculation={calculation} projectId={projectId} />
 
       {/* <SummaryCard calculation={calculation} /> */}
 

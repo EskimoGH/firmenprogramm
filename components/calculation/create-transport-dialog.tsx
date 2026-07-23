@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
-import { createTransport } from "@/actions/transport.action"
+import { createTransportPosition } from "@/actions/transport.action"
 import { calculateTransportCost } from "@/lib/calculation/transport-calculation"
 
 
@@ -42,7 +42,10 @@ export function CreateTransportDialog({
   const [distanceKm,setDistanceKm] = useState("")
   const [trips,setTrips] = useState("1")    
 
-    const [hourlyRate,setHourlyRate] = useState("")
+  const [hourlyRate,setHourlyRate] = useState("")
+  const [overnightStops,setOvernightStops] = useState("0")
+
+  const [overnightCost,setOvernightCost] = useState("0")  
 
     function selectVehicle(type: string | null){
 
@@ -85,9 +88,13 @@ export function CreateTransportDialog({
 
         toll:vehicle.toll,
 
+        overnightStops:Number(overnightStops),
+
+        overnightCost:Number(overnightCost), 
+
         })
 
-        await createTransport({
+        await createTransportPosition({
 
         projectId,
 
@@ -109,6 +116,26 @@ export function CreateTransportDialog({
 
         hourlyRate:Number(hourlyRate),
 
+        overnightStops:Number(overnightStops),
+
+        overnightCost:Number(overnightCost),
+
+
+        drivingHours:
+        calculation.drivingHours,
+
+        labourCost:
+        calculation.labourCost,
+
+        dieselCost:
+        calculation.fuelCost,
+
+        tollCost:
+        calculation.tollCost,
+
+        overnightTotal:
+        calculation.overnightTotal,
+
         totalCost:calculation.totalCost,
 
         })
@@ -120,6 +147,8 @@ export function CreateTransportDialog({
     setDistanceKm("")
     setTrips("1")
     setHourlyRate("")
+    setOvernightStops("0")
+    setOvernightCost("0")
 
   }
 

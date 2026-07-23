@@ -1,14 +1,28 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calculator } from "lucide-react"
+import { formatCurrency } from "@/lib/format/currency"
 
 
 export function CalculationHeader({
   calculation,
+  offerPrice,
 }: {
   calculation: any
+  offerPrice: number
 }) {
 
+const totalTons = calculation.positions.reduce(
+  (sum: number, position: any) =>
+    sum + (position.quantity ?? 0),
+  0
+)
+
+const offerPricePerTon =
+  totalTons > 0
+    ? offerPrice / totalTons
+    : 0
+  
   return (
     <Card>
       <CardContent className="flex items-center justify-between p-6">
@@ -19,16 +33,25 @@ export function CalculationHeader({
             <Calculator className="h-6 w-6" />
           </div>
 
+            <div>
+              <h1 className="text-2xl font-bold">
+                {calculation.title || "Berechnung"}
+              </h1>
 
-          <div>
-            <h1 className="text-xl font-semibold">
-              {calculation.title || "Berechnung"}
-            </h1>
+              <div className="flex flex-col">
+                <span className="text-sm font-medium">
+                  Angebotspreis: {formatCurrency(offerPrice)}
+                </span>
 
-            <p className="text-sm text-muted-foreground">
-              {calculation.project.company.name}
-            </p>
-          </div>
+                <span className="text-sm text-muted-foreground">
+                  {formatCurrency(offerPricePerTon)} €/t · {totalTons.toFixed(2)} t
+                </span>
+              </div>
+
+              <p className="text-sm text-muted-foreground">
+                {calculation.project.company.name}
+              </p>
+            </div>
 
         </div>
 

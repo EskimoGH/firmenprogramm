@@ -8,7 +8,7 @@ datasource db {
 
 enum ProjectStatus {
   OFFEN
-  IN_BEARBEITUNG
+  ZUSCHLAG
   ABGESCHLOSSEN
   STORNIERT
 }
@@ -65,6 +65,7 @@ model Project {
   calculations    Calculation[]
   documents       ProjectDocument[]
   activities      Activity[]
+  vehicleAssignments VehicleAssignment[]
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -79,11 +80,13 @@ model Calculation {
   version         Int
   title           String?
   active          Boolean @default(false)
+  awarded         Boolean @default(false)
 
   summary         CalculationSummary?
   positions       AuctionPosition[]
   transports      ProjectTransport[]
   containers      ProjectContainer[]
+  additionalCosts AdditionalCost[]
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -129,21 +132,37 @@ model AuctionPosition {
 
 model ProjectTransport {
   id              String @id @default(cuid())
-  calculationId   String
-  calculation     Calculation @relation(fields:[calculationId], references:[id])
 
+  calculationId   String
+  calculation     Calculation @relation(fields: [calculationId], references: [id])
+
+  // Eingaben
   vehicleType     String
   distanceKm      Float
   trips           Int @default(1)
+
+  hourlyRate      Float
+
+  overnightStops  Int @default(0)
+  overnightCost   Float @default(0)
+
+  // Fahrzeugdaten (Momentaufnahme)
   avgSpeed        Float
   fuelConsumption Float?
   dieselPrice     Float?
-  hourlyRate Float
   toll            Float?
+
+  // Berechnete Werte
+  drivingHours    Float @default(0)
+  labourCost      Float @default(0)
+  dieselCost      Float @default(0)
+  tollCost        Float @default(0)
+  overnightTotal  Float @default(0)
+
   totalCost       Float @default(0)
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model ProjectContainer {
@@ -156,6 +175,27 @@ model ProjectContainer {
   standingDays    Int?
   price           Float?
   total           Float?
+}
+
+model AdditionalCost {
+
+  id              String @id @default(cuid())
+
+  calculationId   String
+  calculation     Calculation @relation(fields:[calculationId], references:[id])
+
+
+  description     String
+
+  quantity        Float @default(1)
+
+  unitPrice       Float @default(0)
+
+  total           Float @default(0)
+
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model ProjectDocument {
@@ -202,6 +242,44 @@ model VehicleMaster {
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+}
+
+model VehicleAssignment {
+  id                String @id @default(cuid())
+
+  projectId         String
+  project           Project @relation(fields: [projectId], references: [id])
+
+  vehicleId         String
+  vehicle           FleetVehicle @relation(fields: [vehicleId], references: [id])
+
+  departureAt       DateTime?
+  arrivalSiteAt     DateTime?
+  arrivalCompanyAt  DateTime?
+
+  driverId          String?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model FleetVehicle {
+  id              String @id @default(cuid())
+
+  name            String
+  type            String
+
+  licensePlate    String? @unique
+
+  inspectionUntil DateTime?
+  lastService     DateTime?
+
+  weight          Float?
+
+  assignments     VehicleAssignment[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model ContainerMaster {
