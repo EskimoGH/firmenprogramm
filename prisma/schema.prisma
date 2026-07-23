@@ -133,13 +133,17 @@ model ProjectTransport {
   calculation     Calculation @relation(fields:[calculationId], references:[id])
 
   vehicleType     String
-  distanceKm      Float?
-  trips           Int?
-  avgSpeed        Float?
+  distanceKm      Float
+  trips           Int @default(1)
+  avgSpeed        Float
   fuelConsumption Float?
   dieselPrice     Float?
+  hourlyRate Float
   toll            Float?
-  totalCost       Float?
+  totalCost       Float @default(0)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model ProjectContainer {
@@ -189,12 +193,15 @@ model AvvMaster {
 }
 
 model VehicleMaster {
-  id              String @id @default(cuid())
-  type            String @unique
-  avgSpeed        Float
-  fuelConsumption Float
-  toll            Float
-  dieselPrice     Float
+  id                String @id @default(cuid())
+  type              String @unique
+  avgSpeed          Float
+  fuelConsumption   Float
+  toll              Float
+  dieselPrice       Float
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model ContainerMaster {

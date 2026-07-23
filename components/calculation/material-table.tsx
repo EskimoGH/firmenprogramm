@@ -33,7 +33,7 @@ export function MaterialTable({
 
             <TableHead>AVV</TableHead>
 
-            <TableHead>Position</TableHead>
+            <TableHead className="w-[200px]">Position</TableHead>
 
             <TableHead>Menge</TableHead>
 
@@ -70,7 +70,7 @@ export function MaterialTable({
               </TableCell>
 
 
-              <TableCell>
+              <TableCell className="max-w-[100px] truncate">
                 {position.description}
               </TableCell>
 

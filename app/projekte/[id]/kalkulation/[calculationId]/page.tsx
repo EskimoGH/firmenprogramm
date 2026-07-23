@@ -10,7 +10,7 @@ import {
 
 import { CalculationHeader } from "@/components/calculation/calculation-header"
 import { MaterialSection } from "@/components/calculation/material-section"
-//import { TransportCard } from "@/components/calculation/transport-card"
+import { TransportSection } from "@/components/calculation/transport-section"
 //import { AdditionalCostCard } from "@/components/calculation/additional-cost-card"
 //import { SummaryCard } from "@/components/calculation/summary-card"
 
@@ -52,6 +52,12 @@ export default async function CalculationPage({
     const avvMaster = await prisma.avvMaster.findMany({
     orderBy: {
       avv: "asc",
+    },
+  })
+
+    const vehicleMaster = await prisma.vehicleMaster.findMany({
+    orderBy: {
+      type: "asc",
     },
   })
 
@@ -106,7 +112,7 @@ export default async function CalculationPage({
 
       <MaterialSection calculation={calculation} avvMaster={avvMaster} projectId={projectId}/>
 
-      {/* <TransportCard calculation={calculation} /> */}
+      <TransportSection calculation={calculation} vehicleMaster={vehicleMaster} />
 
       {/* <AdditionalCostCard calculation={calculation} /> */}
 

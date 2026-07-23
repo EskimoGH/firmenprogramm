@@ -40,7 +40,7 @@ export default function AngebotsCard({
           />
 
             <Button type="submit" size="sm">
-            + Berechnung erstellen
+            + Berechnung
             </Button>
 
         </form>

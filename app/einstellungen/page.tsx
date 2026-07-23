@@ -1,19 +1,41 @@
-export default function Einstellungen(){
+import { prisma } from "@/lib/prisma"
 
-return (
+import { AvvCard } from "@/components/settings/avv-card"
+import { VehicleCard } from "@/components/settings/vehicle-card"
 
-<div className="p-8">
+export default async function EinstellungenPage() {
 
-<h1 className="text-3xl font-semibold">
-Einstellungen
-</h1>
+  const avvs = await prisma.avvMaster.findMany({
+    orderBy: {
+      avv: "asc",
+    },
+  })
 
-<p className="mt-4 text-muted-foreground">
-Hier kommen später Benutzer und Systemoptionen.
-</p>
+  const vehicles = await prisma.vehicleMaster.findMany({
+    orderBy: {
+      type: "asc",
+    },
+  })
 
-</div>
 
-)
+  return (
+    <div className="p-8 space-y-6">
 
+      <h1 className="text-3xl font-semibold">
+        Einstellungen
+      </h1>
+
+
+      <div className="grid gap-6 md:grid-cols-3">
+        <div className="md:col-span-1">
+            <AvvCard avvs={avvs} />
+        </div>
+        <div className="md:col-span-2">
+            <VehicleCard vehicles={vehicles} />
+        </div>
+
+      </div>
+
+    </div>
+  )
 }

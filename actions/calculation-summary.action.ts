@@ -53,3 +53,44 @@ export async function updateMaterialTotal(
 
   return materialTotal
 }
+
+export async function updateTransportTotal(
+  calculationId: string
+) {
+
+  const transports = await prisma.projectTransport.findMany({
+    where: {
+      calculationId,
+    },
+
+    select: {
+      totalCost: true,
+    },
+  })
+
+  const transportTotal = transports.reduce(
+    (sum, transport) => {
+      return sum + (transport.totalCost ?? 0)
+    },
+    0
+  )
+
+  await prisma.calculationSummary.upsert({
+
+    where: {
+      calculationId,
+    },
+
+    update: {
+      transportTotal,
+    },
+
+    create: {
+      calculationId,
+      transportTotal,
+    },
+
+  })
+
+  return transportTotal
+}

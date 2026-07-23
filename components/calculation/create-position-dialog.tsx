@@ -27,7 +27,7 @@ export function PositionDialog({
     <Dialog>
 
         <DialogTrigger render={<Button />}>
-        + Position hinzufügen
+        + Position
         </DialogTrigger>
 
 

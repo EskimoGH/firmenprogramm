@@ -21,7 +21,7 @@ export function CreateProjectDialog() {
         type="button"
         onClick={() => setOpen(true)}
         >
-        Neues Projekt
+        + Projekt
         </Button>
 
       <DialogContent className="sm:max-w-2xl">

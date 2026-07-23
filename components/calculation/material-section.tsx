@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { PositionDialog } from "./position-dialog"
+import { PositionDialog } from "./create-position-dialog"
 import { MaterialTable } from "./material-table"
 import { formatCurrency } from "@/lib/format/currency"
 
