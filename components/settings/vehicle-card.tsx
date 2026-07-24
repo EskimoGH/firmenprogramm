@@ -21,7 +21,7 @@ export function VehicleCard({
         <div className="flex items-center justify-between">
 
             <CardTitle>
-            Fahrzeuge
+            Fahrzeugstammdaten
             </CardTitle>
 
             <CreateVehicleDialog />

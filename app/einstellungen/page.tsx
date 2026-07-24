@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma"
 
 import { AvvCard } from "@/components/settings/avv-card"
 import { VehicleCard } from "@/components/settings/vehicle-card"
+import { FleetCard } from "@/components/settings/fleet-card"
 
 export default async function EinstellungenPage() {
 
@@ -14,6 +15,12 @@ export default async function EinstellungenPage() {
   const vehicles = await prisma.vehicleMaster.findMany({
     orderBy: {
       type: "asc",
+    },
+  })
+
+  const fleetVehicles = await prisma.fleetVehicle.findMany({
+    orderBy: {
+      name: "asc",
     },
   })
 
@@ -30,8 +37,9 @@ export default async function EinstellungenPage() {
         <div className="md:col-span-1">
             <AvvCard avvs={avvs} />
         </div>
-        <div className="md:col-span-2">
+        <div className="md:col-span-2 space-y-6">
             <VehicleCard vehicles={vehicles} />
+            <FleetCard vehicles={fleetVehicles} />
         </div>
 
       </div>

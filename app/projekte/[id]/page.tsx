@@ -16,6 +16,10 @@ import { LocationCard } from "@/components/layout/location-card"
 import { ContactsCard } from "@/components/layout/contacts-card"
 import { NotesCard } from "@/components/layout/notes-card"
 import AngebotsCard from "@/components/layout/angebots-card"
+import { AwardDialog } from "@/components/layout/award-dialog"
+import { FahrzeugeinsatzCard } from "@/components/layout/fahrzeugeinsatz-card"
+
+import { ProjectStatus } from "@prisma/client"
 
 export default async function ProjektDetails({
   params,
@@ -71,21 +75,44 @@ export default async function ProjektDetails({
 
       <div className="flex justify-between items-center">
 
+
         <div>
 
           <h1 className="text-3xl font-semibold">
-            Projekt {project.verkaufsId}
+          Projekt {project.verkaufsId}
           </h1>
 
+
           <p className="text-muted-foreground mt-1">
-            {project.company.name}
+          {project.company.name}
           </p>
+
+
+          </div>
+
+
+          <div className="flex gap-3 items-center">
+
+
+          {
+          project.status !== ProjectStatus.ZUSCHLAG && (
+
+          <AwardDialog
+          projectId={project.id}
+          calculations={project.calculations}
+          />
+
+          )
+          }
+
+
+          <Badge>
+          {project.status}
+          </Badge>
+
 
         </div>
 
-        <Badge>
-          {project.status}
-        </Badge>
 
       </div>
 
@@ -109,7 +136,20 @@ export default async function ProjektDetails({
 
       <div className="grid gap-6 md:grid-cols-1">
         
-        <AngebotsCard projectId={project.id} calculations={project.calculations} />
+        {
+          project.status === "ZUSCHLAG" && (
+
+            <FahrzeugeinsatzCard
+              projectId={project.id}
+              assignments={project.vehicleAssignments}
+            />
+          )
+        }
+
+        <AngebotsCard
+        projectId={project.id}
+        calculations={project.calculations}
+        />
 
       </div>
 

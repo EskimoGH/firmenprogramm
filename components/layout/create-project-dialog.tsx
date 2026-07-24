@@ -70,7 +70,6 @@ export function CreateProjectDialog() {
               <Input
                 id="projektname"
                 name="projektname"
-                defaultValue="TEST"
               />
             </div>
 

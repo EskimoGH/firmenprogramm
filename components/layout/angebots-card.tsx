@@ -1,5 +1,7 @@
 import { createCalculation } from "@/actions/calculation.actions"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { CheckCircle } from "lucide-react"
 
 interface AngebotsCardProps {
   projectId: string
@@ -7,6 +9,7 @@ interface AngebotsCardProps {
     id: string
     version: number
     title: string | null
+    awarded: boolean
   }[]
 }
 
@@ -71,9 +74,9 @@ export default function AngebotsCard({
               p-4
               "
             >
+            <div className="flex items-center gap-4">
 
               <div>
-
                 <p className="font-medium">
                   Angebot Version {calc.version}
                 </p>
@@ -81,8 +84,17 @@ export default function AngebotsCard({
                 <p className="text-sm text-gray-500">
                   {calc.title ?? "Entwurf"}
                 </p>
-
               </div>
+
+
+              {calc.awarded && (
+                <Badge>
+                  <CheckCircle className="mr-1 h-3 w-3" />
+                  Zuschlag
+                </Badge>
+              )}
+
+            </div>
 
                 <a
                 href={`/projekte/${projectId}/kalkulation/${calc.id}`}

@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 
 import {
-  MoreHorizontal,
+  MoreVertical,
   Pencil,
   Trash,
 } from "lucide-react"
@@ -36,7 +36,7 @@ export function RowActions({
             variant="ghost"
             size="icon"
           >
-            <MoreHorizontal className="h-4 w-4" />
+            <MoreVertical className="h-4 w-4" />
           </Button>
         }
       />

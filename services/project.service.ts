@@ -40,6 +40,11 @@ export async function getProject(id: string) {
           summary: true,
         },
       },
+        vehicleAssignments: {
+          include: {
+            vehicle: true,
+        },
+      },
       documents: true,
     },
   })
