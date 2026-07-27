@@ -46,7 +46,7 @@ export function FleetTable({
           </TableHead>
 
           <TableHead>
-            Wartung
+            Letzte Wartung
           </TableHead>
 
           <TableHead>

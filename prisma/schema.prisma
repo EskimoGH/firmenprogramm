@@ -6,6 +6,16 @@ datasource db {
   provider = "sqlite"
 }
 
+enum DocumentType {
+  OFFER
+  CALCULATION
+  ORDER
+  INVOICE
+  DELIVERY_NOTE
+  PHOTO
+  OTHER
+}
+
 enum ProjectStatus {
   OFFEN
   ZUSCHLAG
@@ -199,17 +209,20 @@ model AdditionalCost {
 }
 
 model ProjectDocument {
-  id              String @id @default(cuid())
-  projectId       String
-  project         Project @relation(fields:[projectId], references:[id])
+  id            String   @id @default(cuid())
 
-  category        String?
-  version         Int @default(1)
-  fileName        String
-  filePath        String
-  mimeType        String?
+  originalName  String
+  filename      String
+  mimeType      String
+  size          Int
 
-  createdAt       DateTime @default(now())
+  type          DocumentType
+  path          String
+
+  projectId     String
+  project       Project @relation(fields:[projectId], references:[id])
+
+  createdAt     DateTime @default(now())
 }
 
 model Activity {
@@ -258,6 +271,11 @@ model VehicleAssignment {
   arrivalCompanyAt  DateTime?
 
   driverId          String?
+
+  // Momentaufnahme des Fahrzeugs
+  vehicleName       String?
+  vehicleType       String?
+  licensePlate      String?
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

@@ -18,6 +18,7 @@ import { NotesCard } from "@/components/layout/notes-card"
 import AngebotsCard from "@/components/layout/angebots-card"
 import { AwardDialog } from "@/components/layout/award-dialog"
 import { FahrzeugeinsatzCard } from "@/components/layout/fahrzeugeinsatz-card"
+import { ProjectCoverSheetDialog } from "@/components/layout/project-cover-sheet-dialog"
 
 import { ProjectStatus } from "@prisma/client"
 
@@ -38,6 +39,15 @@ export default async function ProjektDetails({
       </div>
     )
   }
+
+  const contact = project.company.contacts[0]
+  const avvCodes = Array.from(
+    new Set(
+      project.calculations.flatMap((calculation) =>
+        calculation.positions.map((position) => position.avv)
+      )
+    )
+  ).sort()
 
   return (
 
@@ -91,7 +101,18 @@ export default async function ProjektDetails({
           </div>
 
 
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-wrap justify-end gap-3 items-center">
+
+          <ProjectCoverSheetDialog
+            data={{
+              projectTitle: project.projektname ?? `Projekt ${project.verkaufsId}`,
+              projectNumber: project.verkaufsId,
+              customerName: project.company.name,
+              createdAt: project.createdAt.toISOString(),
+              contactName: contact ? `${contact.firstName} ${contact.lastName}` : null,
+              avvCodes,
+            }}
+          />
 
 
           {

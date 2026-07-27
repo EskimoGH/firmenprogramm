@@ -133,14 +133,13 @@ key={item.id}
 
 
 <TableCell>
-{item.vehicle.name}
+  {item.vehicleName}
 
-{item.vehicle.licensePlate && (
-<span className="text-muted-foreground ml-1">
-({item.vehicle.licensePlate})
-</span>
-)}
-
+  {item.licensePlate && (
+    <span className="text-muted-foreground ml-1">
+      ({item.licensePlate})
+    </span>
+  )}
 </TableCell>
 
 

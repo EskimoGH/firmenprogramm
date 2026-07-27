@@ -22,7 +22,7 @@ return (
 
 <Card>
 
-<CardContent className="p-6 space-y-4">
+<CardContent className="px-6 space-y-4">
 
 
 <div className="flex items-center justify-between">

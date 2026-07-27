@@ -17,73 +17,95 @@ return prisma.fleetVehicle.findMany({
 
 
 
-export async function createVehicleAssignment(data:{
- projectId:string
- vehicleId:string
-}){
+export async function createVehicleAssignment(data: {
+  projectId: string
+  vehicleId: string
+}) {
 
+  const vehicle = await prisma.fleetVehicle.findUnique({
+    where: {
+      id: data.vehicleId,
+    },
+  })
 
-await prisma.vehicleAssignment.create({
+  if (!vehicle) {
+    throw new Error("Fahrzeug nicht gefunden")
+  }
 
-data:{
- projectId:data.projectId,
- vehicleId:data.vehicleId
-}
+  await prisma.vehicleAssignment.create({
+    data: {
+      projectId: data.projectId,
+      vehicleId: vehicle.id,
 
-})
-
-
-revalidatePath(
+      vehicleName: vehicle.name,
+      vehicleType: vehicle.type,
+      licensePlate: vehicle.licensePlate,
+    },
+  })
+  revalidatePath(
 `/projekte/${data.projectId}`
 )
 
 }
 
 
-
 export async function updateVehicleAssignment(
-id:string,
-data:{
- vehicleId:string
- departureAt?:string
- arrivalSiteAt?:string
- arrivalCompanyAt?:string
- driverId?:string
-}
-){
+  id: string,
+  data: {
+    vehicleId: string
+    departureAt?: string
+    arrivalSiteAt?: string
+    arrivalCompanyAt?: string
+    driverId?: string
+  }
+) {
+
+  const vehicle = await prisma.fleetVehicle.findUnique({
+    where: {
+      id: data.vehicleId,
+    },
+  })
+
+  if (!vehicle) {
+    throw new Error("Fahrzeug nicht gefunden")
+  }
 
 
-const assignment =
-await prisma.vehicleAssignment.update({
+  const assignment =
+    await prisma.vehicleAssignment.update({
 
-where:{
- id
-},
+      where:{
+        id
+      },
 
-data:{
- vehicleId:data.vehicleId,
+      data:{
+        vehicleId: vehicle.id,
 
- departureAt:data.departureAt
- ? new Date(data.departureAt)
- : null,
+        // Snapshot aktualisieren
+        vehicleName: vehicle.name,
+        vehicleType: vehicle.type,
+        licensePlate: vehicle.licensePlate,
 
- arrivalSiteAt:data.arrivalSiteAt
- ? new Date(data.arrivalSiteAt)
- : null,
+        departureAt:data.departureAt
+        ? new Date(data.departureAt)
+        : null,
 
- arrivalCompanyAt:data.arrivalCompanyAt
- ? new Date(data.arrivalCompanyAt)
- : null,
+        arrivalSiteAt:data.arrivalSiteAt
+        ? new Date(data.arrivalSiteAt)
+        : null,
 
- driverId:data.driverId || null
-}
+        arrivalCompanyAt:data.arrivalCompanyAt
+        ? new Date(data.arrivalCompanyAt)
+        : null,
 
-})
+        driverId:data.driverId || null
+      }
+    })
 
 
-revalidatePath(
-`/projekte/${assignment.projectId}`
-)
+  revalidatePath(
+    `/projekte/${assignment.projectId}`
+  )
 
 }
 

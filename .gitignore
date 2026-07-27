@@ -44,3 +44,6 @@ next-env.d.ts
 # Prisma database
 prisma/dev.db
 dev.db
+
+# Hochgeladene Dokumente und Bilder
+storage/
