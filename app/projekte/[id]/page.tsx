@@ -18,7 +18,8 @@ import { NotesCard } from "@/components/layout/notes-card"
 import AngebotsCard from "@/components/layout/angebots-card"
 import { AwardDialog } from "@/components/layout/award-dialog"
 import { FahrzeugeinsatzCard } from "@/components/layout/fahrzeugeinsatz-card"
-import { ProjectCoverSheetDialog } from "@/components/layout/project-cover-sheet-dialog"
+import { ContainereinsatzCard } from "@/components/layout/containereinsatz-card"
+import { ProjectCoverSheetDialog } from "@/components/layout/project-deckblatt-dialog"
 
 import { ProjectStatus } from "@prisma/client"
 
@@ -155,23 +156,25 @@ export default async function ProjektDetails({
 
       </div>
 
-      <div className="grid gap-6 md:grid-cols-1">
-        
-        {
-          project.status === "ZUSCHLAG" && (
+      {project.status === "ZUSCHLAG" && (
+        <div className="grid gap-6 md:grid-cols-2">
+          <FahrzeugeinsatzCard
+            projectId={project.id}
+            assignments={project.vehicleAssignments}
+          />
 
-            <FahrzeugeinsatzCard
-              projectId={project.id}
-              assignments={project.vehicleAssignments}
-            />
-          )
-        }
+          <ContainereinsatzCard
+            projectId={project.id}
+            containers={project.projectContainers}
+          />
+        </div>
+      )}
 
+      <div className="mt-6">
         <AngebotsCard
-        projectId={project.id}
-        calculations={project.calculations}
+          projectId={project.id}
+          calculations={project.calculations}
         />
-
       </div>
 
     </div>

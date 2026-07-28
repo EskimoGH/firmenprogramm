@@ -96,9 +96,9 @@ export default async function Projekte() {
                     {activeCalculation?.positions.length ?? 0}
                     </td>
 
-                    <td className="p-3 text-center">
+                    {/* <td className="p-3 text-center">
                     {activeCalculation?.containers.length ?? 0}
-                    </td>
+                    </td> */}
 
                     <td className="p-3">
                     -

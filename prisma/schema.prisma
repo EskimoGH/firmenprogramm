@@ -24,110 +24,110 @@ enum ProjectStatus {
 }
 
 model Company {
-  id          String @id @default(cuid())
-  name        String
-  debtorNo    String?
-  street      String?
-  postalCode  String?
-  city        String?
-  phone       String?
-  email       String?
+  id         String  @id @default(cuid())
+  name       String
+  debtorNo   String?
+  street     String?
+  postalCode String?
+  city       String?
+  phone      String?
+  email      String?
 
-  contacts    CompanyContact[]
-  projects    Project[]
+  contacts CompanyContact[]
+  projects Project[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  deletedAt   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model CompanyContact {
-  id          String @id @default(cuid())
-  companyId   String
-  company     Company @relation(fields:[companyId], references:[id])
+  id        String  @id @default(cuid())
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
 
-  firstName   String
-  lastName    String
-  role        String?
-  phone       String?
-  email       String?
+  firstName String
+  lastName  String
+  role      String?
+  phone     String?
+  email     String?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  deletedAt   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model Project {
-  id              String @id @default(cuid())
-  verkaufsId      String @unique
-  projektname     String?
-  auftragsnummer  String?
-  status          ProjectStatus @default(OFFEN)
+  id             String        @id @default(cuid())
+  verkaufsId     String        @unique
+  projektname    String?
+  auftragsnummer String?
+  status         ProjectStatus @default(OFFEN)
 
-  companyId       String
-  company         Company @relation(fields:[companyId], references:[id])
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
 
-  street          String?
-  postalCode      String?
-  city            String?
-  note            String?
+  street     String?
+  postalCode String?
+  city       String?
+  note       String?
 
-  calculations    Calculation[]
-  documents       ProjectDocument[]
-  activities      Activity[]
+  calculations       Calculation[]
+  documents          ProjectDocument[]
+  activities         Activity[]
   vehicleAssignments VehicleAssignment[]
+  projectContainers  ProjectContainer[]
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  deletedAt       DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model Calculation {
-  id              String @id @default(cuid())
-  projectId       String
-  project         Project @relation(fields:[projectId], references:[id])
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
 
-  version         Int
-  title           String?
-  active          Boolean @default(false)
-  awarded         Boolean @default(false)
+  version Int
+  title   String?
+  active  Boolean @default(false)
+  awarded Boolean @default(false)
 
   summary         CalculationSummary?
   positions       AuctionPosition[]
   transports      ProjectTransport[]
-  containers      ProjectContainer[]
   additionalCosts AdditionalCost[]
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([projectId, version])
 }
 
 model CalculationSummary {
-  id              String @id @default(cuid())
-  calculationId   String @unique
-  calculation      Calculation @relation(fields:[calculationId], references:[id])
+  id            String      @id @default(cuid())
+  calculationId String      @unique
+  calculation   Calculation @relation(fields: [calculationId], references: [id])
 
-  materialTotal   Float @default(0)
-  transportTotal  Float @default(0)
-  containerTotal  Float @default(0)
-  labourTotal     Float @default(0)
-  disposalTotal   Float @default(0)
-  otherTotal      Float @default(0)
-  profit          Float @default(0)
-  offerPrice      Float @default(0)
+  materialTotal  Float @default(0)
+  transportTotal Float @default(0)
+  containerTotal Float @default(0)
+  labourTotal    Float @default(0)
+  disposalTotal  Float @default(0)
+  otherTotal     Float @default(0)
+  profit         Float @default(0)
+  offerPrice     Float @default(0)
 }
 
 model AuctionPosition {
-  id              String @id @default(cuid())
-  calculationId   String
-  calculation     Calculation @relation(fields:[calculationId], references:[id])
+  id            String      @id @default(cuid())
+  calculationId String
+  calculation   Calculation @relation(fields: [calculationId], references: [id])
 
-  positionNo      Int
-  avv             String
-  description     String
-  customText      String?
+  positionNo  Int
+  avv         String
+  description String
+  customText  String?
 
   quantity        Float
   metalShare      Float?
@@ -137,24 +137,24 @@ model AuctionPosition {
   dismantlingCost Float?
   materialValue   Float?
 
-  createdAt       DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model ProjectTransport {
-  id              String @id @default(cuid())
+  id String @id @default(cuid())
 
-  calculationId   String
-  calculation     Calculation @relation(fields: [calculationId], references: [id])
+  calculationId String
+  calculation   Calculation @relation(fields: [calculationId], references: [id])
 
   // Eingaben
-  vehicleType     String
-  distanceKm      Float
-  trips           Int @default(1)
+  vehicleType String
+  distanceKm  Float
+  trips       Int    @default(1)
 
-  hourlyRate      Float
+  hourlyRate Float
 
-  overnightStops  Int @default(0)
-  overnightCost   Float @default(0)
+  overnightStops Int   @default(0)
+  overnightCost  Float @default(0)
 
   // Fahrzeugdaten (Momentaufnahme)
   avgSpeed        Float
@@ -163,156 +163,168 @@ model ProjectTransport {
   toll            Float?
 
   // Berechnete Werte
-  drivingHours    Float @default(0)
-  labourCost      Float @default(0)
-  dieselCost      Float @default(0)
-  tollCost        Float @default(0)
-  overnightTotal  Float @default(0)
+  drivingHours   Float @default(0)
+  labourCost     Float @default(0)
+  dieselCost     Float @default(0)
+  tollCost       Float @default(0)
+  overnightTotal Float @default(0)
 
-  totalCost       Float @default(0)
+  totalCost Float @default(0)
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ProjectContainer {
-  id              String @id @default(cuid())
-  calculationId   String
-  calculation     Calculation @relation(fields:[calculationId], references:[id])
+  id                String  @id @default(cuid())
+  projectId         String
+  containerMasterId String?
 
-  containerType   String
-  quantity        Int
-  standingDays    Int?
-  price           Float?
-  total           Float?
+  // Snapshot der Stammdaten 
+  containerName   String
+  containerNumber String
+  volumeTon       Float
+
+  departureOperationDate DateTime?
+  arrivalSiteDate        DateTime?
+  arrivalOperationDate   DateTime?
+  project                Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  containerMaster        ContainerMaster? @relation(fields: [containerMasterId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
 }
 
 model AdditionalCost {
+  id String @id @default(cuid())
 
-  id              String @id @default(cuid())
+  calculationId String
+  calculation   Calculation @relation(fields: [calculationId], references: [id])
 
-  calculationId   String
-  calculation     Calculation @relation(fields:[calculationId], references:[id])
+  description String
 
+  quantity Float @default(1)
 
-  description     String
+  unitPrice Float @default(0)
 
-  quantity        Float @default(1)
+  total Float @default(0)
 
-  unitPrice       Float @default(0)
-
-  total           Float @default(0)
-
-
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ProjectDocument {
-  id            String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  originalName  String
-  filename      String
-  mimeType      String
-  size          Int
+  originalName String
+  filename     String
+  mimeType     String
+  size         Int
 
-  type          DocumentType
-  path          String
+  type DocumentType
+  path String
 
-  projectId     String
-  project       Project @relation(fields:[projectId], references:[id])
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
 
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model Activity {
-  id              String @id @default(cuid())
-  projectId       String
-  project         Project @relation(fields:[projectId], references:[id])
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
 
-  type            String
-  message         String
+  type    String
+  message String
 
-  createdAt       DateTime @default(now())
+  createdAt DateTime @default(now())
 }
 
 model AvvMaster {
-  id              String @id @default(cuid())
-  avv             String @unique
-  description     String
-  price           Float @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id          String   @id @default(cuid())
+  avv         String   @unique
+  description String
+  price       Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model VehicleMaster {
-  id                String @id @default(cuid())
-  type              String @unique
-  avgSpeed          Float
-  fuelConsumption   Float
-  toll              Float
-  dieselPrice       Float
+  id              String @id @default(cuid())
+  type            String @unique
+  avgSpeed        Float
+  fuelConsumption Float
+  toll            Float
+  dieselPrice     Float
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model VehicleAssignment {
-  id                String @id @default(cuid())
+  id String @id @default(cuid())
 
-  projectId         String
-  project           Project @relation(fields: [projectId], references: [id])
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
 
-  vehicleId         String
-  vehicle           FleetVehicle @relation(fields: [vehicleId], references: [id])
+  vehicleId String
+  vehicle   FleetVehicle @relation(fields: [vehicleId], references: [id])
 
-  departureAt       DateTime?
-  arrivalSiteAt     DateTime?
-  arrivalCompanyAt  DateTime?
+  departureAt      DateTime?
+  arrivalSiteAt    DateTime?
+  arrivalCompanyAt DateTime?
 
-  driverId          String?
+  driverId String?
 
   // Momentaufnahme des Fahrzeugs
-  vehicleName       String?
-  vehicleType       String?
-  licensePlate      String?
+  vehicleName  String?
+  vehicleType  String?
+  licensePlate String?
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model FleetVehicle {
-  id              String @id @default(cuid())
+  id String @id @default(cuid())
 
-  name            String
-  type            String
+  name String
+  type String
 
-  licensePlate    String? @unique
+  licensePlate String? @unique
 
   inspectionUntil DateTime?
   lastService     DateTime?
 
-  weight          Float?
+  weight Float?
 
-  assignments     VehicleAssignment[]
+  assignments VehicleAssignment[]
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ContainerMaster {
-  id              String @id @default(cuid())
-  name            String @unique
-  price           Float?
+  id                String             @id @default(cuid())
+  name              String
+  containerNumber   String             @unique
+  volumeTon         Float
+  projectContainers ProjectContainer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model DocumentTemplate {
-  id              String @id @default(cuid())
-  name            String
-  filePath        String
+  id       String @id @default(cuid())
+  name     String
+  filePath String
 }
 
 model AppSettings {
-  id              String @id @default(cuid())
-  companyName     String?
+  id          String  @id @default(cuid())
+  companyName String?
 }

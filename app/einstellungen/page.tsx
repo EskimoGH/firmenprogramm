@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma"
 import { AvvCard } from "@/components/settings/avv-card"
 import { VehicleCard } from "@/components/settings/vehicle-card"
 import { FleetCard } from "@/components/settings/fleet-card"
+import { getContainerMasters } from "@/actions/container-master.action"
+import { ContainerMasterCard } from "@/components/settings/containermaster-card"
 
 export default async function EinstellungenPage() {
 
@@ -24,6 +26,7 @@ export default async function EinstellungenPage() {
     },
   })
 
+  const containers = await getContainerMasters()
 
   return (
     <div className="p-8 space-y-6">
@@ -40,6 +43,7 @@ export default async function EinstellungenPage() {
         <div className="md:col-span-2 space-y-6">
             <VehicleCard vehicles={vehicles} />
             <FleetCard vehicles={fleetVehicles} />
+            <ContainerMasterCard containers={containers}/>
         </div>
 
       </div>

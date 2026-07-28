@@ -42,7 +42,6 @@ export default async function CalculationPage({
 
       positions: true,
       transports: true,
-      containers: true,
       additionalCosts:true,
       summary: true,
 

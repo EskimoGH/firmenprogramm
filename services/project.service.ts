@@ -9,7 +9,6 @@ export async function getProjects() {
           summary: true,
           positions: true,
           transports: true,
-          containers: true,
           additionalCosts:true,
         },
       },
@@ -35,7 +34,6 @@ export async function getProject(id: string) {
         include: {
           positions: true,
           transports: true,
-          containers: true,
           additionalCosts:true,
           summary: true,
         },
@@ -45,6 +43,11 @@ export async function getProject(id: string) {
             vehicle: true,
         },
       },
+      projectContainers: { 
+        orderBy: {
+           createdAt: "desc", 
+          }, 
+        },
       documents: true,
     },
   })
